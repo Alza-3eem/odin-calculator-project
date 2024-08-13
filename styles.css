@@ -9,6 +9,8 @@
     justify-content: center;
     align-items: center;
     gap: 24px;
+    border-radius: 18px;
+    background-color: rgb(168, 230, 207);
 }
 
 #display {
@@ -21,12 +23,13 @@
     font-size: 48px;
     background-color: black;
     color: white;
+    border-radius: 18px;
 }
 
 #row1, #row2, #row3, #row4 {
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 18px;
 }
 
 .btn {
@@ -41,6 +44,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 24px;
+    box-shadow: 4px 4px black;
 }
 
 #add, #subtract, #multiply, #divide {
