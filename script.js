@@ -1,49 +1,56 @@
 const add = (num1, num2) => num1 + num2;
 const subtract = (num1, num2) => num1 - num2;
 const multiply = (num1, num2) => num1 * num2;
-const divide = (num1, num2) => num2 === 0 ? "WTF" : num1 / num2;
+const divide = (num1, num2) => num2 === 0 ? "Error" : num1 / num2;
 
-const buttons = document.querySelectorAll(".btn")
-const display = document.getElementById("display")
-const clearBtn = document.getElementById("clear")
-const addBtn = document.getElementById("add")
-const subtractBtn = document.getElementById("subtract")
-const multiplyBtn = document.getElementById("multiply")
-const divideBtn = document.getElementById("divide")
-const equalsBtn = document.getElementById("equals")
+const buttons = document.querySelectorAll(".btn");
+const display = document.getElementById("display");
+const clearBtn = document.getElementById("btn-clear");
+const equalsBtn = document.getElementById("btn-equals");
 
 let currentInput = "";
-let num1 = null;
+let currentResult = null;
 let operator = null;
+let shouldResetDisplay = false;
 
-buttons.forEach(button => { 
+buttons.forEach(button => {
     button.addEventListener("click", () => {
-       if (button.innerText === "+" || button.innerText === "-" || button.innerText === "*" || button.innerText === "/") {
-        if (num1 === null) {
-            num1 = parseFloat(currentInput);
-            operator = button.innerText;
-            currentInput = "";
-        } else if (currentInput !== "") {
-            num1 = performOperation(num1, parseFloat(currentInput), operator);
-        }
-       } else if (button.innerText === "=") {
-            if (operator && currentInput !== "") {
-                currentInput = performOperation(num1, parseFloat(currentInput), operator).toString();
-                operator = null;
-                num1 = null;
+        const value = button.innerText;
+        
+        if (value === '+' || value === '-' || value === '*' || value === '/') {
+            if (currentResult !== null && currentInput !== "") {
+                currentResult = performOperation(currentResult, parseFloat(currentInput), operator);
+                display.innerText = currentResult;
+                currentInput = "";
+            } else {
+                currentResult = parseFloat(currentInput);
+                currentInput = "";
             }
-       } else {
-        currentInput += button.innerText;
-       }
-       display.innerText = currentInput;
+            operator = value;
+            shouldResetDisplay = false;
+        } else if (value === '=') {
+            if (operator && currentInput !== "") {
+                currentResult = performOperation(currentResult, parseFloat(currentInput), operator);
+                display.innerText = currentResult;
+                currentInput = currentResult;
+                operator = null; 
+                shouldResetDisplay = true; 
+            }
+        } else if (value === 'CLR') {
+            currentResult = null;
+            operator = null;
+            currentInput = "";
+            display.innerText = "";
+        } else {
+            if (shouldResetDisplay) {
+                currentInput = value;
+                shouldResetDisplay = false;
+            } else {
+                currentInput += value;
+            }
+            display.innerText = currentInput;
+        }
     });
-});
-
-clearBtn.addEventListener("click", () => {
-    display.innerText = "";
-    currentInput = "";
-    num1 = null;
-    operator = null;
 });
 
 function performOperation(num1, num2, operator) {
